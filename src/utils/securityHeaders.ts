@@ -1,0 +1,1 @@
+// Placeholder: Static Web App config with CSP, CORS headers

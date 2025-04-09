@@ -1,0 +1,1 @@
+// Placeholder for Azure Application Insights or other frontend telemetry

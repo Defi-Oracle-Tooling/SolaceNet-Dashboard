@@ -1,0 +1,11 @@
+{
+  "name": "SolaceNet Dashboard",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:18",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    }
+  },
+  "postCreateCommand": "npm install && npx vitest --ui",
+  "forwardPorts": [5173]
+}
