@@ -30,7 +30,7 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
-  name: '${siteName}-keyvault'
+  name: 'solacenetkv'
   location: effectiveLocation
   properties: {
     sku: {
@@ -60,6 +60,10 @@ resource staticWebApp 'Microsoft.Web/staticSites@2022-03-01' = {
     buildProperties: {
       appLocation: '/'
       outputLocation: 'dist'
+    }
+    sku: {
+      name: 'Free'
+      tier: 'Free'
     }
   }
 }
@@ -97,6 +101,7 @@ resource sqlDatabase 'Microsoft.Sql/servers/databases@2021-11-01' = {
   properties: {
     collation: 'SQL_Latin1_General_CP1_CI_AS'
     maxSizeBytes: 2147483648 // 2 GB
+    requestedBackupStorageRedundancy: 'Local'
   }
   sku: {
     name: 'S1'
