@@ -61,11 +61,6 @@ resource sqlServer 'Microsoft.Sql/servers@2022-02-01-preview' = {
     administratorLogin: 'adminUser'
     administratorLoginPassword: 'securePassword123!'
   }
-    sku: {
-      name: 'Standard'
-      tier: 'Standard'
-      capacity: 10
-    }
 }
 
 resource sqlDatabase 'Microsoft.Sql/servers/databases@2022-02-01-preview' = {
