@@ -4,7 +4,8 @@
       "route": "/",
       "headers": {
         "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-eval';",
-        "X-Content-Type-Options": "nosniff"
+        "X-Content-Type-Options": "nosniff",
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
       }
     }
   ]
