@@ -52,10 +52,14 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
 }
 
 // Add Static Web App with Managed Identity
-resource staticWebApp 'Microsoft.Web/staticSites@2022-03-01' = {
+resource staticWebApp 'Microsoft.Web/staticSites@2023-01-01' = {
   name: siteName
   location: staticSiteRegion
   kind: 'StaticSite'
+  sku: {
+    name: 'Free'
+    tier: 'Free'
+  }
   properties: {
     repositoryUrl: repositoryUrl
     branch: branch
