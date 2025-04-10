@@ -60,6 +60,10 @@ resource staticWebApp 'Microsoft.Web/staticSites@2023-01-01' = {
   identity: {
     type: 'SystemAssigned'
   }
+  sku: {
+    name: 'Standard'
+    tier: 'Standard'
+  }
   properties: {
     repositoryUrl: repositoryUrl
     branch: branch
