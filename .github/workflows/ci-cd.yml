@@ -1,0 +1,58 @@
+name: CI-CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test
+
+      - name: Docker Build
+        run: docker build -t solacenet-dashboard .
+
+      # - name: Docker Login
+      #   run: docker login -u \${{ secrets.DOCKER_USER }} -p \${{ secrets.DOCKER_PASS }}
+
+      # - name: Docker Push
+      #   run: docker push <your-registry>/solacenet-dashboard:latest
+
+  # Example deploy job (uncomment and configure if you have Azure details):
+  # deploy:
+  #   needs: build-and-test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Use Node
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: 18
+  #     - name: Install dependencies
+  #       run: npm install
+  #     - name: Azure WebApp Deploy
+  #       uses: azure/webapps-deploy@v2
+  #       with:
+  #         app-name: "solacenet"
+  #         slot-name: "production"
+  #         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+  #         package: .

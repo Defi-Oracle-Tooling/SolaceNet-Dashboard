@@ -1,11 +1,11 @@
-const axios = require('axios');
+import axios from 'axios';
 
 (async () => {
   try {
-    const url = 'https://app.solacebank.net/';
+    const url: string = 'https://app.solacebank.net/';
     const response = await axios.get(url);
 
-    const headers = response.headers;
+    const headers: Record<string, string> = response.headers;
 
     console.log('Validating headers for:', url);
 
@@ -29,7 +29,7 @@ const axios = require('axios');
     } else {
       console.log('❌ X-Content-Type-Options is missing.');
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error validating headers:', error.message);
   }
 })();
