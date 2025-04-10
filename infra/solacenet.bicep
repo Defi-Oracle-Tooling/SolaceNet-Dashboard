@@ -60,6 +60,9 @@ resource staticWebApp 'Microsoft.Web/staticSites@2023-01-01' = {
     name: 'Free'
     tier: 'Free'
   }
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     repositoryUrl: repositoryUrl
     branch: branch
