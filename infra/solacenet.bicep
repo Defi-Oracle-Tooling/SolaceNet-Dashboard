@@ -6,7 +6,7 @@ param repositoryToken string
 param branch string
 
 // Fallback logic for location
-var effectiveLocation = location == 'Global' ? 'North Europe' : location
+var effectiveLocation = location == 'Global' ? 'westeurope' : location
 
 // Add resources for Application Insights, Log Analytics Workspace, and Key Vault
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
