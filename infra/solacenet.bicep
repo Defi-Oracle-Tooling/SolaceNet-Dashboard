@@ -10,7 +10,7 @@ var effectiveLocation = location == 'Global' ? 'westeurope' : location
 
 // Add resources for Application Insights, Log Analytics Workspace, and Key Vault
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: '${siteName}-appinsights'
+  name: '${siteName}-${effectiveLocation}-appinsights'
   location: effectiveLocation
   kind: 'web'
   properties: {
@@ -19,7 +19,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 }
 
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
-  name: '${siteName}-loganalytics'
+  name: '${siteName}-${effectiveLocation}-loganalytics'
   location: effectiveLocation
   properties: {
     sku: {
@@ -30,7 +30,7 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
-  name: 'solacenetkv'
+  name: 'solacenetkv${effectiveLocation}'
   location: effectiveLocation
   properties: {
     sku: {
