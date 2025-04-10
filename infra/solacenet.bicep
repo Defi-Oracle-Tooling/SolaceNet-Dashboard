@@ -4,6 +4,7 @@ param repositoryUrl string
 @secure()
 param repositoryToken string
 param branch string
+param staticSiteRegion string = 'centralus'
 
 // Fallback logic for location
 var effectiveLocation = location == 'Global' ? 'westeurope' : location
@@ -53,7 +54,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
 // Add Static Web App with Managed Identity
 resource staticWebApp 'Microsoft.Web/staticSites@2022-03-01' = {
   name: siteName
-  location: effectiveLocation
+  location: staticSiteRegion
   kind: 'StaticSite'
   properties: {
     repositoryUrl: repositoryUrl
