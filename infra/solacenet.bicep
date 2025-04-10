@@ -57,7 +57,7 @@ resource staticWebApp 'Microsoft.Web/staticSites@2023-01-01' = {
   location: staticSiteRegion
   kind: 'StaticSite'
   sku: {
-    name: 'free'
+    name: 'Free'
     tier: 'Free'
   }
   identity: {
