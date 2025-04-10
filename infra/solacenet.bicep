@@ -1,4 +1,3 @@
-param siteName string = 'solacenet-dashboard'
 param location string = 'Global'
 param repositoryUrl string
 @secure()
@@ -8,6 +7,8 @@ param staticSiteRegion string = 'centralus'
 
 // Fallback logic for location
 var effectiveLocation = location == 'Global' ? 'westeurope' : location
+
+var siteName = 'solacenet-dashboard-${uniqueString(resourceGroup().id)}'
 
 // Add resources for Application Insights, Log Analytics Workspace, and Key Vault
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
