@@ -56,4 +56,34 @@ resource staticWebApp 'Microsoft.Web/staticSites@2022-03-01' = {
   }
 }
 
+// Add Azure SQL Database resource
+resource sqlServer 'Microsoft.Sql/servers@2022-02-01-preview' = {
+  name: 'solacenet-sql-server'
+  location: resourceGroup().location
+  properties: {
+    administratorLogin: 'adminUser'
+    administratorLoginPassword: listSecret(keyVault.id, 'sqlAdminPassword', { apiVersion: '2022-02-01' }).value
+  }
+  sku: {
+    name: 'Standard'
+    tier: 'Standard'
+    capacity: 10
+  }
+}
+
+resource sqlDatabase 'Microsoft.Sql/servers/databases@2022-02-01-preview' = {
+    location: resourceGroup().location
+  name: 'solacenet-database'
+  parent: sqlServer
+  properties: {
+    collation: 'SQL_Latin1_General_CP1_CI_AS'
+    maxSizeBytes: 2147483648 // 2 GB
+  }
+  sku: {
+    name: 'S1'
+    tier: 'Standard'
+    capacity: 10
+  }
+}
+
 output webAppUrl string = staticWebApp.properties.defaultHostname
