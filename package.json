@@ -1,0 +1,19 @@
+{
+  "name": "solacenet-dashboard",
+  "version": "1.0.0",
+  "description": "Dashboard for SolaceNet",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "build": "vite build",
+    "start": "vite"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vitest": "^0.34.6"
+  },
+  "dependencies": {
+    "applicationinsights": "^3.6.0",
+    "react-dom": "^19.1.0"
+  }
+}

@@ -1,0 +1,6 @@
+name: solacenet-dashboard
+services:
+  solacenet-dashboard:
+    project: ./src
+    language: ts
+    host: staticwebapp

@@ -6,7 +6,7 @@
     }
   },
   "globalHeaders": {
-    "Content-Security-Policy": "default-src 'self';",
+    "Content-Security-Policy": "default-src 'self'; script-src 'self';",
     "Access-Control-Allow-Origin": "*"
   }
 }
