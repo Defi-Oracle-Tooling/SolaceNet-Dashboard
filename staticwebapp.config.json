@@ -1,12 +1,10 @@
 {
-  "routes": [],
-  "responseOverrides": {
-    "404": {
-      "rewrite": "/index.html"
+  "routes": [
+    {
+      "route": "/",
+      "headers": {
+        "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-eval';"
+      }
     }
-  },
-  "globalHeaders": {
-    "Content-Security-Policy": "default-src 'self'; script-src 'self';",
-    "Access-Control-Allow-Origin": "*"
-  }
+  ]
 }
