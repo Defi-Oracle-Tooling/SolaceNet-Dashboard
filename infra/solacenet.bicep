@@ -2,8 +2,8 @@
 
 param siteName string = 'solacenet-dashboard'
 param location string = 'Global'
-param repositoryUrl string = 'https://github.com/your-repo/solacenet-dashboard'
-param branch string = 'main'
+param repositoryUrl string
+param branch string
 
 // Fallback logic for location
 var effectiveLocation = location == 'Global' ? 'West Europe' : location
@@ -54,9 +54,6 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
 resource staticWebApp 'Microsoft.Web/staticSites@2022-03-01' = {
   name: siteName
   location: effectiveLocation
-  identity: {
-    type: 'SystemAssigned'
-  }
   properties: {
     repositoryUrl: repositoryUrl
     branch: branch
@@ -104,7 +101,6 @@ resource sqlDatabase 'Microsoft.Sql/servers/databases@2021-11-01' = {
   sku: {
     name: 'S1'
     tier: 'Standard'
-    capacity: 10
   }
 }
 
