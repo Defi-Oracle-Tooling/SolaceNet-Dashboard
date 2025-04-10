@@ -1,14 +1,17 @@
 // SolaceNet Dashboard - Azure Static Web App Deployment Bicep Template
 
 param siteName string = 'solacenet-dashboard'
-param location string = 'West Europe'
-param repositoryUrl string = 'https://github.com/Defi-Oracle-Tooling/solacenet-dashboard'
+param location string = 'Global'
+param repositoryUrl string = 'https://github.com/your-repo/solacenet-dashboard'
 param branch string = 'main'
+
+// Fallback logic for location
+var effectiveLocation = location == 'Global' ? 'West Europe' : location
 
 // Add resources for Application Insights, Log Analytics Workspace, and Key Vault
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: '${siteName}-appinsights'
-  location: location
+  location: effectiveLocation
   kind: 'web'
   properties: {
     Application_Type: 'web'
@@ -17,7 +20,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
   name: '${siteName}-loganalytics'
-  location: location
+  location: effectiveLocation
   properties: {
     sku: {
       name: 'PerGB2018'
@@ -28,21 +31,32 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
 
 resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
   name: '${siteName}-keyvault'
-  location: location
+  location: effectiveLocation
   properties: {
     sku: {
       family: 'A'
       name: 'standard'
     }
     tenantId: subscription().tenantId
-    accessPolicies: []
+    accessPolicies: [
+      {
+        tenantId: subscription().tenantId
+        objectId: '00000000-0000-0000-0000-000000000000' // Replace with actual object ID
+        permissions: {
+          secrets: [ 'get', 'list', 'set', 'delete' ]
+        }
+      }
+    ]
   }
 }
 
+// Add Static Web App with Managed Identity
 resource staticWebApp 'Microsoft.Web/staticSites@2022-03-01' = {
   name: siteName
-  location: location
-  
+  location: effectiveLocation
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     repositoryUrl: repositoryUrl
     branch: branch
@@ -53,20 +67,36 @@ resource staticWebApp 'Microsoft.Web/staticSites@2022-03-01' = {
   }
 }
 
-// Add Azure SQL Database resource
+// Update Key Vault access policies to include Static Web App's managed identity
+resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2021-06-01-preview' = {
+  name: 'add'
+  parent: keyVault
+  properties: {
+    accessPolicies: [
+      {
+        tenantId: subscription().tenantId
+        objectId: staticWebApp.identity.principalId
+        permissions: {
+          secrets: [ 'get', 'list' ]
+        }
+      }
+    ]
+  }
+}
+
 resource sqlServer 'Microsoft.Sql/servers@2022-02-01-preview' = {
   name: 'solacenet-sql-server'
-  location: location
+  location: effectiveLocation
   properties: {
     administratorLogin: 'adminUser'
     administratorLoginPassword: 'securePassword123!'
   }
 }
 
-resource sqlDatabase 'Microsoft.Sql/servers/databases@2022-02-01-preview' = {
-  location: resourceGroup().location
-  name: 'solacenet-database'
+resource sqlDatabase 'Microsoft.Sql/servers/databases@2021-11-01' = {
+  name: 'solacenet-db'
   parent: sqlServer
+  location: resourceGroup().location
   properties: {
     collation: 'SQL_Latin1_General_CP1_CI_AS'
     maxSizeBytes: 2147483648 // 2 GB
