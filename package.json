@@ -12,7 +12,7 @@
     "@types/jest": "^29.5.14",
     "@vitejs/plugin-react": "^4.3.4",
     "jsdom": "^26.0.0",
-    "vitest": "^0.34.6"
+    "vitest": "^3.1.1"
   },
   "dependencies": {
     "@azure/identity": "^4.8.0",
