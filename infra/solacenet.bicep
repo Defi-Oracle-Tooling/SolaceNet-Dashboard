@@ -6,7 +6,7 @@ param repositoryToken string
 param branch string
 
 // Fallback logic for location
-var effectiveLocation = location == 'Global' ? 'West Europe' : location
+var effectiveLocation = location == 'Global' ? 'North Europe' : location
 
 // Add resources for Application Insights, Log Analytics Workspace, and Key Vault
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
@@ -54,6 +54,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
 resource staticWebApp 'Microsoft.Web/staticSites@2022-03-01' = {
   name: siteName
   location: effectiveLocation
+  kind: 'staticSites'
   properties: {
     repositoryUrl: repositoryUrl
     branch: branch
