@@ -1,5 +1,3 @@
-// SolaceNet Dashboard - Azure Static Web App Deployment Bicep Template
-
 param siteName string = 'solacenet-dashboard'
 param location string = 'Global'
 param repositoryUrl string
