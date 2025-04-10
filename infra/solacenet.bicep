@@ -42,10 +42,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
 resource staticWebApp 'Microsoft.Web/staticSites@2022-03-01' = {
   name: siteName
   location: location
-  sku: {
-    name: 'Free'
-    tier: 'Free'
-  }
+  
   properties: {
     repositoryUrl: repositoryUrl
     branch: branch
@@ -59,20 +56,20 @@ resource staticWebApp 'Microsoft.Web/staticSites@2022-03-01' = {
 // Add Azure SQL Database resource
 resource sqlServer 'Microsoft.Sql/servers@2022-02-01-preview' = {
   name: 'solacenet-sql-server'
-  location: resourceGroup().location
+  location: location
   properties: {
     administratorLogin: 'adminUser'
-    administratorLoginPassword: listSecret(keyVault.id, 'sqlAdminPassword', { apiVersion: '2022-02-01' }).value
+    administratorLoginPassword: 'securePassword123!'
   }
-  sku: {
-    name: 'Standard'
-    tier: 'Standard'
-    capacity: 10
-  }
+    sku: {
+      name: 'Standard'
+      tier: 'Standard'
+      capacity: 10
+    }
 }
 
 resource sqlDatabase 'Microsoft.Sql/servers/databases@2022-02-01-preview' = {
-    location: resourceGroup().location
+  location: resourceGroup().location
   name: 'solacenet-database'
   parent: sqlServer
   properties: {
