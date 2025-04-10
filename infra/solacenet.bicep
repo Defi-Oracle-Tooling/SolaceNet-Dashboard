@@ -3,6 +3,8 @@
 param siteName string = 'solacenet-dashboard'
 param location string = 'Global'
 param repositoryUrl string
+@secure()
+param repositoryToken string
 param branch string
 
 // Fallback logic for location
@@ -61,10 +63,7 @@ resource staticWebApp 'Microsoft.Web/staticSites@2022-03-01' = {
       appLocation: '/'
       outputLocation: 'dist'
     }
-    sku: {
-      name: 'Free'
-      tier: 'Free'
-    }
+    repositoryToken: repositoryToken
   }
 }
 
