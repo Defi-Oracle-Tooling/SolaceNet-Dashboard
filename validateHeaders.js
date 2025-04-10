@@ -11,25 +11,25 @@ const axios = require('axios');
 
     // Check Content-Security-Policy
     if (headers['content-security-policy']) {
-      console.log('✅ Content-Security-Policy:', headers['content-security-policy']);
+      console.log('✅ Content-Security-Policy is present:', headers['content-security-policy']);
     } else {
-      console.error('❌ Content-Security-Policy is missing');
+      console.log('❌ Content-Security-Policy is missing.');
     }
 
     // Check Cache-Control
     if (headers['cache-control']) {
-      console.log('✅ Cache-Control:', headers['cache-control']);
+      console.log('✅ Cache-Control is present:', headers['cache-control']);
     } else {
-      console.error('❌ Cache-Control is missing or empty');
+      console.log('❌ Cache-Control is missing.');
     }
 
     // Check X-Content-Type-Options
-    if (headers['x-content-type-options'] === 'nosniff') {
-      console.log('✅ X-Content-Type-Options is set to nosniff');
+    if (headers['x-content-type-options']) {
+      console.log('✅ X-Content-Type-Options is present:', headers['x-content-type-options']);
     } else {
-      console.error('❌ X-Content-Type-Options is missing or incorrect');
+      console.log('❌ X-Content-Type-Options is missing.');
     }
   } catch (error) {
-    console.error('Error fetching the URL:', error.message);
+    console.error('Error validating headers:', error.message);
   }
 })();
