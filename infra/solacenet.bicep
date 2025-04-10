@@ -54,7 +54,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
 resource staticWebApp 'Microsoft.Web/staticSites@2022-03-01' = {
   name: siteName
   location: effectiveLocation
-  kind: 'staticSites'
+  kind: 'StaticSite'
   properties: {
     repositoryUrl: repositoryUrl
     branch: branch
