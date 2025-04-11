@@ -5,6 +5,6 @@
     "jsx": "react",
     "esModuleInterop": true,
     // Added Vitest types for global test functions
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "node"]
   }
 }
