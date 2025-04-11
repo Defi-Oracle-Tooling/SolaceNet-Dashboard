@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -euo pipefill
 
 # Display script usage
 function show_usage {
@@ -29,14 +29,6 @@ if [ -z "$RESOURCE_GROUP" ]; then
 fi
 
 echo "🔍 Setting up monitoring for $ENVIRONMENT environment in resource group $RESOURCE_GROUP"
-
-# Load environment variables
-if [ -f ".env.$ENVIRONMENT" ]; then
-  echo "Loading environment variables from .env.$ENVIRONMENT"
-  export $(grep -v '^#' .env.$ENVIRONMENT | xargs)
-else
-  echo "Warning: .env.$ENVIRONMENT file not found"
-fi
 
 # Check for Azure CLI
 if ! command -v az &> /dev/null; then
@@ -80,38 +72,5 @@ if [ -f "$ENV_FILE" ]; then
 else
   echo "Warning: $ENV_FILE not found. Cannot update environment variables."
 fi
-
-# Set up log analytics workspace
-echo "Setting up Log Analytics workspace..."
-WORKSPACE_NAME="solacenet-logs-$ENVIRONMENT"
-
-az monitor log-analytics workspace create \
-  --resource-group "$RESOURCE_GROUP" \
-  --workspace-name "$WORKSPACE_NAME" \
-  --location "$LOCATION"
-
-echo "Connecting Application Insights to Log Analytics workspace..."
-WORKSPACE_ID=$(az monitor log-analytics workspace show \
-  --resource-group "$RESOURCE_GROUP" \
-  --workspace-name "$WORKSPACE_NAME" \
-  --query "id" \
-  --output tsv)
-
-az monitor app-insights component update \
-  --app "$APP_NAME" \
-  --resource-group "$RESOURCE_GROUP" \
-  --workspace "$WORKSPACE_ID"
-
-# Set up alerts
-echo "Setting up basic alerts..."
-az monitor metrics alert create \
-  --name "High CPU Alert" \
-  --resource-group "$RESOURCE_GROUP" \
-  --scopes $(az monitor app-insights component show --app "$APP_NAME" --resource-group "$RESOURCE_GROUP" --query "id" -o tsv) \
-  --condition "avg PerformanceCounter/processoorpercent_Process_solacenet-dashboard-$ENVIRONMENT > 80" \
-  --window-size 5m \
-  --evaluation-frequency 1m \
-  --severity 2 \
-  --description "Alert when CPU usage exceeds 80% for 5 minutes"
 
 echo "✅ Monitoring setup completed!"
