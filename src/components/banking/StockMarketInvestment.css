@@ -1,0 +1,58 @@
+/* Styling for StockMarketInvestment Component */
+
+.stock-market-investment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stock-market-investment h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.stock-market-investment form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+}
+
+.stock-market-investment label {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.stock-market-investment input {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.stock-market-investment button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.stock-market-investment button:hover {
+  background-color: #0056b3;
+}
+
+.stock-market-investment .response {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #28a745;
+}

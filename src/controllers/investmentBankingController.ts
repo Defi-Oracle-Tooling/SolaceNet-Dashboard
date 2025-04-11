@@ -1,24 +1,19 @@
-import { Router, Request, Response } from 'express';
-import { provideGlobalInvestmentBankingServices, issueAndTradeSecurities, offerFinancialGuarantees } from '../services/investment_banking';
+import { investInStockMarket } from '../services/trust_services';
+import { Request, Response } from 'express';
 
-const router = Router();
+export async function handleStockMarketInvestment(req: Request, res: Response): Promise<void> {
+  try {
+    const { clientId, investmentDetails } = req.body;
 
-// GET /investment-banking/global-services
-router.get('/global-services', (req: Request, res: Response) => {
-  const result = provideGlobalInvestmentBankingServices();
-  return res.json({ success: true, data: result });
-});
+    if (!clientId || !investmentDetails) {
+      res.status(400).json({ error: 'Missing required fields: clientId or investmentDetails' });
+      return;
+    }
 
-// POST /investment-banking/securities
-router.post('/securities', (req: Request, res: Response) => {
-  const result = issueAndTradeSecurities();
-  return res.json({ success: true, data: result });
-});
-
-// POST /investment-banking/guarantees
-router.post('/guarantees', (req: Request, res: Response) => {
-  const result = offerFinancialGuarantees();
-  return res.json({ success: true, data: result });
-});
-
-export default router;
+    const result = await investInStockMarket(clientId, investmentDetails);
+    res.status(200).json({ message: result });
+  } catch (error) {
+    console.error('Error handling stock market investment:', error);
+    res.status(500).json({ error: 'Failed to process stock market investment' });
+  }
+}

@@ -1,9 +1,10 @@
 import express from 'express';
-import { loadSecrets, PORT } from './config/env';
+import { loadSecrets } from './config/env';
 import { AppDataSource } from './config/db';
-import { requestLogger } from './middleware/logger';
+import { logger } from './middleware/logger';
 import router from './routes';
 import { initAppInsights } from './telemetry/appInsights';
+import helmet from 'helmet';
 
 export async function bootstrap() {
   // 1) Load secrets (Key Vault + .env)
@@ -18,12 +19,22 @@ export async function bootstrap() {
 
   // 4) Express app
   const app = express();
+
+  // Secure the app with Helmet middleware
+  app.use(helmet());
+
   app.use(express.json());
-  app.use(requestLogger);
+  app.use(logger);
   app.use('/', router);
 
-  const port = PORT || '3000';
+  // Error-handling middleware
+  app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+  });
+
+  const port = process.env.PORT || '3000';
   app.listen(port, () => {
-    console.log(\`Server running on port \${port}...\`);
+    console.log(`Server running on port ${port}...`);
   });
 }

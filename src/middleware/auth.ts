@@ -1,20 +1,21 @@
-import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../config/env';
+import { Request, Response, NextFunction } from 'express';
 
-export function authMiddleware(req: Request, res: Response, next: NextFunction) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    return res.status(401).json({ error: 'No auth token provided.' });
-  }
+const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
+    const token = req.headers.authorization?.split(' ')[1];
 
-  const token = authHeader.split(' ')[1];
-  try {
-    jwt.verify(token, JWT_SECRET || 'fallbacksecret');
-    // attach user info if desired
-    // (req as any).user = decoded;
-    next();
-  } catch (err) {
-    return res.status(401).json({ error: 'Invalid token.' });
-  }
-}
+    if (!token) {
+        return res.status(401).json({ message: 'Access token is missing or invalid' });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET as string, (err, user) => {
+        if (err) {
+            return res.status(403).json({ message: 'Token is invalid or expired' });
+        }
+
+        req.user = user;
+        next();
+    });
+};
+
+export default authenticateJWT;

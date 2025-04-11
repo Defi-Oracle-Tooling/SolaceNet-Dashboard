@@ -1,7 +1,15 @@
-import { render } from '@testing-library/react'
-import App from '../App'
+import React from 'react';
+import { render } from '@testing-library/react';
+import { axe, toHaveNoViolations } from 'vitest-axe';
+import { describe, it, expect } from 'vitest';
+import App from '../App';
 
-test('App should render and pass basic accessibility', () => {
-  render(<App />)
-  expect(true).toBe(true)
-})
+expect.extend({ toHaveNoViolations });
+
+describe('Accessibility tests', () => {
+  it('should have no accessibility violations', async () => {
+    const { container } = render(<App />);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
+});

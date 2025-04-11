@@ -9,21 +9,28 @@
     "start": "vite"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.14",
+    "@types/jest-axe": "^3.5.9",
     "@vitejs/plugin-react": "^4.3.4",
+    "jest-axe": "^10.0.0",
     "jsdom": "^26.0.0",
-    "vitest": "^3.1.1"
+    "vitest": "^3.1.1",
+    "vitest-axe": "^0.1.0"
   },
   "dependencies": {
     "@azure/identity": "^4.8.0",
     "@azure/keyvault-secrets": "^4.9.0",
     "@mui/material": "^7.0.2",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/winston": "^2.4.4",
     "applicationinsights": "^3.6.0",
     "axios": "^1.8.4",
     "dotenv": "^16.4.7",
+    "helmet": "^8.1.0",
     "pg": "^8.14.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "winston": "^3.17.0"
   }
 }
