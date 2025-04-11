@@ -1,13 +1,43 @@
-export async function investInStockMarket(clientId: string, investmentDetails: any): Promise<string> {
+import { logError } from '../utils/monitoring';
+
+export async function investInStockMarket(clientId: string, investmentDetails: { amount: number; stockSymbol: string }) {
   try {
-    console.log(`Processing stock market investment for client: ${clientId} with details:`, investmentDetails);
+    if (!clientId || investmentDetails.amount <= 0 || !investmentDetails.stockSymbol) {
+      throw new Error('Invalid investment details provided.');
+    }
 
-    // Simulate stock market investment logic
-    const investmentResult = `Investment of ${investmentDetails.amount} in ${investmentDetails.stockSymbol} completed successfully for client: ${clientId}`;
+    // Simulate investment logic
+    const response = await fetch('https://api.stockmarket.com/invest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clientId, ...investmentDetails }),
+    });
 
-    return investmentResult;
+    if (!response.ok) {
+      throw new Error(`Investment failed with status: ${response.status}`);
+    }
+
+    return `Investment of ${investmentDetails.amount} in ${investmentDetails.stockSymbol} completed successfully for client: ${clientId}`;
   } catch (error) {
-    console.error('Error during stock market investment:', error);
-    throw new Error('Stock market investment operation failed.');
+    logError(error, { clientId, investmentDetails });
+    throw error;
   }
+}
+
+// Function to manage trust property
+export function manageTrustProperty(propertyDetails: any, userId: string) {
+    // Validate property details
+    if (!propertyDetails || !userId) {
+        throw new Error("Invalid property details or user ID");
+    }
+
+    // Simulate saving property details to the database
+    const savedProperty = {
+        ...propertyDetails,
+        userId,
+        createdAt: new Date().toISOString(),
+    };
+
+    // Return the saved property details
+    return savedProperty;
 }

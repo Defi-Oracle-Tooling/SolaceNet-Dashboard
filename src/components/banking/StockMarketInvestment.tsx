@@ -1,57 +1,64 @@
 import React, { useState } from 'react';
 import './StockMarketInvestment.css';
+import { investInStockMarket } from '../../services/trust_services';
 
-const StockMarketInvestment: React.FC = () => {
+const StockMarketInvestment = () => {
   const [clientId, setClientId] = useState('');
-  const [investmentDetails, setInvestmentDetails] = useState('');
-  const [responseMessage, setResponseMessage] = useState('');
+  const [stockSymbol, setStockSymbol] = useState('');
+  const [amount, setAmount] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleInvestment = async () => {
+  const handleInvestment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMessage('');
+
+    if (!clientId || !stockSymbol || !amount || Number(amount) <= 0) {
+      setMessage('Please provide valid input for all fields.');
+      return;
+    }
+
     try {
-      const response = await fetch('/api/investment/stock-market', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ clientId, investmentDetails }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        setResponseMessage(data.message);
-      } else {
-        setResponseMessage(data.error || 'Failed to process investment');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setResponseMessage('An error occurred while processing the investment.');
+      const result = await investInStockMarket(clientId, { amount: Number(amount), stockSymbol });
+      setMessage(result);
+    } catch (error: any) {
+      setMessage(error.message || 'An error occurred while processing your investment.');
     }
   };
 
   return (
     <div className="stock-market-investment">
       <h2>Stock Market Investment</h2>
-      <div>
-        <label>Client ID:</label>
-        <input
-          type="text"
-          value={clientId}
-          onChange={(e) => setClientId(e.target.value)}
-          placeholder="Enter Client ID"
-          title="Client ID"
-        />
-      </div>
-      <div>
-        <label>Investment Details:</label>
-        <textarea
-          value={investmentDetails}
-          onChange={(e) => setInvestmentDetails(e.target.value)}
-          placeholder="Enter Investment Details"
-          title="Investment Details"
-        />
-      </div>
-      <button onClick={handleInvestment}>Submit Investment</button>
-      {responseMessage && <p>{responseMessage}</p>}
+      <form onSubmit={handleInvestment}>
+        <div className="form-group">
+          <label htmlFor="clientId">Client ID:</label>
+          <input
+            type="text"
+            id="clientId"
+            value={clientId}
+            onChange={(e) => setClientId(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="stockSymbol">Stock Symbol:</label>
+          <input
+            type="text"
+            id="stockSymbol"
+            value={stockSymbol}
+            onChange={(e) => setStockSymbol(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="amount">Investment Amount:</label>
+          <input
+            type="number"
+            id="amount"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </div>
+        <button type="submit">Invest</button>
+      </form>
+      {message && <p className="message">{message}</p>}
     </div>
   );
 };
