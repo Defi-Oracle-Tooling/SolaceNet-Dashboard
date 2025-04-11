@@ -1,4 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+
+// Updated test file to use Vitest
 import { manageTrustProperty } from '../services/trust_services';
 
 describe('Trust Property Management', () => {

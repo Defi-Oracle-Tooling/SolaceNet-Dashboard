@@ -1,6 +1,6 @@
-/// <reference types="vitest" />
+import { describe, it, expect, vi } from 'vitest';
 
-import { vi } from 'vitest';
+// Updated test file to use Vitest
 import { query } from '../utils/database';
 
 vi.mock('../utils/database', () => {
@@ -25,17 +25,17 @@ describe('Database Query Function', () => {
   });
 
   it('should handle empty queries gracefully', async () => {
-    vi.mocked(query).mockRejectedValueOnce(new Error('Query cannot be empty'));
+    mockQuery.mockRejectedValueOnce(new Error('Query cannot be empty'));
     await expect(query('')).rejects.toThrow('Query cannot be empty');
   });
 
   it('should throw an error for invalid database credentials', async () => {
-    vi.mocked(query).mockRejectedValueOnce(new Error('Invalid database credentials'));
+    mockQuery.mockRejectedValueOnce(new Error('Invalid database credentials'));
     await expect(query('SELECT 1')).rejects.toThrow('Invalid database credentials');
   });
 
   it('should handle connection timeouts', async () => {
-    vi.mocked(query).mockRejectedValueOnce(new Error('Connection timeout'));
+    mockQuery.mockRejectedValueOnce(new Error('Connection timeout'));
     await expect(query('SELECT 1')).rejects.toThrow('Connection timeout');
   });
 });

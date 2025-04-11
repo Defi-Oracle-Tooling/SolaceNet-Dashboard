@@ -4,7 +4,8 @@ import { axe, toHaveNoViolations } from 'vitest-axe';
 import { describe, it, expect } from 'vitest';
 import App from '../App';
 
-expect.extend({ toHaveNoViolations });
+// Updated test file to use Vitest
+expect.extend(toHaveNoViolations);
 
 describe('Accessibility tests', () => {
   it('should have no accessibility violations', async () => {

@@ -1,2 +1,3 @@
-import { toHaveNoViolations } from 'jest-axe';
-expect.extend({ toHaveNoViolations });
+import { toHaveNoViolations } from 'vitest-axe';
+
+expect.extend(toHaveNoViolations);
